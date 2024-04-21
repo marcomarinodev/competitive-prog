@@ -1,0 +1,75 @@
+use std::cmp;
+
+// https://leetcode.com/problems/replace-elements-with-greatest-element-on-right-side/description/
+pub fn replace_elements(arr: Vec<i32>) -> Vec<i32> {
+
+    let mut max = i32::MIN;
+    let mut res = vec![0; arr.len()];
+
+    for i in (0..arr.len()).rev() {
+        if i == arr.len() - 1 {
+            res[i] = -1;
+            max = cmp::max(max, arr[i]);
+            continue;
+        }
+
+        res[i] = max;
+        max = cmp::max(max, arr[i]);
+    }
+
+    res
+}
+
+/* print all leaders in an array: an element in an array is leader 
+only if it is greater than all the elements on its right side
+*/
+pub fn get_leaders(arr: Vec<i32>) -> Vec<i32> {
+    let mut max = i32::MIN;
+    let mut res = Vec::new();
+
+    for i in (0..arr.len()).rev() {
+        if arr[i] > max {
+            res.push(arr[i]);
+            max = arr[i];
+        }
+    }
+
+    res
+}
+
+// TESTS
+#[cfg(test)]
+mod lec1_tests {
+    use crate::problems::get_leaders;
+
+    #[test]
+    fn get_leaders_test() {
+        // Basic test case
+        let arr = vec![16, 17, 4, 3, 5, 2];
+        assert_eq!(get_leaders(arr), vec![17,5,2]);
+
+        // Empty array test case
+        let arr = vec![];
+        assert_eq!(get_leaders(arr), vec![]);
+
+        // Single element test case
+        let arr = vec![5];
+        assert_eq!(get_leaders(arr), vec![5]);
+
+        // Negative numbers test case
+        let arr = vec![-1, -2, -3, -4, -5];
+        assert_eq!(get_leaders(arr), vec![-1, -2, -3, -4, -5]);
+
+        // All equal elements test case
+        let arr = vec![3, 3, 3, 3, 3];
+        assert_eq!(get_leaders(arr), vec![3]);
+
+        // All decreasing elements test case
+        let arr = vec![5, 4, 3, 2, 1];
+        assert_eq!(get_leaders(arr), vec![5]);
+
+        // Mixed positive and negative numbers test case
+        let arr = vec![10, -4, 5, -6, 3];
+        assert_eq!(get_leaders(arr), vec![10, 5, 3]);
+    }
+}
