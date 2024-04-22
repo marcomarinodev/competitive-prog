@@ -61,6 +61,17 @@ pub fn max_sub_array(nums: Vec<i32>) -> i32 {
     max
 }
 
+pub fn missing_number(nums: Vec<i32>) -> i32 {
+    let expected_total = nums.len() * (nums.len() + 1) / 2;
+    let mut actual_total = 0;
+
+    for num in nums {
+        actual_total += num;
+    }
+
+    expected_total as i32 - actual_total
+}
+
 // TESTS
 #[cfg(test)]
 mod lec1_tests {

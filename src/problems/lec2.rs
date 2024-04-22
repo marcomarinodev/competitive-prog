@@ -22,7 +22,7 @@ pub fn trapping_rain_water(height: Vec<i32>) -> i32 {
             // the current index
             if height[left] < max_left {
                 res += max_left - height[left];
-            } else {
+            } else {    
                 // otherwise update left bound
                 max_left = height[left];
             }
