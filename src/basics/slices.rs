@@ -23,12 +23,12 @@ pub fn first_word(str: &String) -> &str {
     &str[..]
 }
 
-fn main() {
-    let mut s = String::from("hello world");
+// fn main() {
+//     let mut s = String::from("hello world");
 
-    let first_word = first_word(&s);
+//     let first_word = first_word(&s);
 
-    // s.clear() returns error, because there is already a immutable reference
+//     // s.clear() returns error, because there is already a immutable reference
 
-    println!("The first word is: {}", first_word);
-}
+//     println!("The first word is: {}", first_word);
+// }
