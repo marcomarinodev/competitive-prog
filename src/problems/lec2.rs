@@ -1,4 +1,4 @@
-use std::collections::VecDeque;
+use std::collections::{HashMap, VecDeque};
 
 pub fn trapping_rain_water(height: Vec<i32>) -> i32 {
     let mut res = 0;
@@ -71,5 +71,31 @@ pub fn max_sliding_window(nums: Vec<i32>, k: i32) -> Vec<i32> {
     }
 
     res
+}
+
+// https://leetcode.com/problems/next-greater-element-i/
+pub fn next_greater_element(nums1: Vec<i32>, nums2: Vec<i32>) -> Vec<i32> {
+    let (mut num_map, mut stack) = (HashMap::new(), vec![]);
+    let mut res = vec![-1; nums1.len()];
+
+    nums1.iter().enumerate().for_each(|(i, &num)| {
+        num_map.insert(num, i);
+    });
+
+    nums2.into_iter().for_each(|num| {
+        while let Some(&last) = stack.last() {
+            if num > last { // num is the next greater element of the last
+                let popped_last = stack.pop().unwrap();
+                if let Some(last_idx) = num_map.get(&popped_last) {
+                    res[*last_idx] = num;
+                }
+            } else {
+                break;
+            }
+        }
+        stack.push(num);
+    });
+
+    res 
 }
 
