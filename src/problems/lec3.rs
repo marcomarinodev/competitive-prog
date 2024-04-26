@@ -151,12 +151,87 @@ pub fn find_largest_dist(intervals: &mut Vec<(usize, usize)>, c: usize) -> Optio
 
 }
 
+// https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/
+/*
+Input: nums = [5,7,7,8,8,8,10], target = 8
+Output: [3,5]
+
+
+*/
+fn search_min_idx(nums: &Vec<i32>, target: i32) -> i32 {
+    let mut low = 0;
+    let mut high = nums.len();
+    let mut ans = None;
+
+    while low < high {
+        let mid = low + (high - low) / 2;
+
+        match target.cmp(&nums[mid]) {
+            std::cmp::Ordering::Equal => {
+                high = mid;
+                ans = Some(mid);
+            }
+            std::cmp::Ordering::Less => high = mid,
+            std::cmp::Ordering::Greater => low = mid + 1,
+        }
+    }
+
+    if ans != None {
+        ans.unwrap() as i32
+    } else {
+        -1
+    }
+}
+
+fn search_max_idx(nums: &Vec<i32>, target: i32) -> i32 {
+    let mut low = 0;
+    let mut high = nums.len();
+    let mut ans = None;
+
+    while low < high {
+        let mid = low + (high - low) / 2;
+
+        match target.cmp(&nums[mid]) {
+            std::cmp::Ordering::Equal => {
+                low = mid + 1;
+                ans = Some(mid);
+            }
+            std::cmp::Ordering::Less => high = mid,
+            std::cmp::Ordering::Greater => low = mid + 1,
+        }
+    }
+
+    if ans != None {
+        ans.unwrap() as i32
+    } else {
+        -1
+    }
+}
+
+pub fn search_range(nums: &Vec<i32>, target: i32) -> Vec<i32> {
+    let mut res = vec![-1; 2];
+
+    res[0] = search_min_idx(&nums, target);
+    res[1] = search_max_idx(&nums, target);
+
+    res
+}
+
 // TESTS
 #[cfg(test)]
 mod lec3_tests {
     use crate::problems::binary_search;
     use crate::problems::binary_search_first_occ;
     use crate::problems::binary_search_successor;
+    use crate::problems::search_range;
+
+    #[test]
+    fn search_range_test() {
+        let vec1 = vec![5,7,7,8,8,10];
+
+        assert_eq!(search_range(&vec1, 8), vec![3,4]);
+        assert_eq!(search_range(&vec1, 6), vec![-1, -1]);
+    }
 
     #[test]
     fn binary_search_test() {
