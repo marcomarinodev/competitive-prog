@@ -152,7 +152,7 @@ pub fn next_greater_elements(nums: Vec<i32>) -> Vec<i32> {
 
 // TESTS
 #[cfg(test)]
-mod lec1_tests {
+mod lec2_tests {
     use crate::problems::next_greater_elements;
 
     #[test]
@@ -166,7 +166,6 @@ mod lec1_tests {
 
     }
 }
-
 
 /* (***)
 The key is to read the input as a doubled array
