@@ -217,6 +217,58 @@ pub fn search_range(nums: &Vec<i32>, target: i32) -> Vec<i32> {
     res
 }
 
+// https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
+pub fn find_min(nums: Vec<i32>) -> i32 {
+    let mut low = 0;
+    let mut high = nums.len() - 1;
+
+    while low <= high {
+        let mid = low + (high - low) / 2;
+
+        if mid == low || mid == high {
+            return nums[low].min(nums[high]);
+        }
+
+        if (nums[low] < nums[mid] && nums[mid] < nums[high]) || nums[low] > nums[mid]  {
+            high = mid;
+        } else {
+            low = mid + 1;
+        }
+    }
+
+    nums[low]
+}
+
+// https://leetcode.com/problems/find-peak-element/
+pub fn find_peak_element(nums: Vec<i32>) -> i32 {
+    let n = nums.len();
+    if n == 1 {
+        return 0;
+    } else if nums[0] > nums[1] {
+        return 0;
+    } else if nums[n-1] > nums[n - 2] {
+        return (n - 1) as i32;
+    }
+
+    let mut low = 0;
+    let mut high = nums.len() - 1;
+
+    while low <= high {
+        let mid = low + (high - low) / 2;
+        if nums[mid] > nums[mid + 1] && nums[mid] > nums[mid - 1] {
+            return mid as i32;
+        }
+
+        if nums[mid] < nums[mid - 1] {
+            high = mid;
+        } else {
+            low = mid + 1;
+        }
+    }
+
+    -1
+}
+
 // TESTS
 #[cfg(test)]
 mod lec3_tests {

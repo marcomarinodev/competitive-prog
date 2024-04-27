@@ -6,3 +6,5 @@ The repo is composed by two main rust modules:
 - **basics**: it covers most of the basic rust topics such as ownership, references and borrowing...
 - **problems**: it contains submodules where each submodule is a lecture and in each lecture you can find the problems 
 discussed in that lecture
+
+Almost all the probles are discussed here: [unipi cp course](https://pages.di.unipi.it/rossano/competitive/)
