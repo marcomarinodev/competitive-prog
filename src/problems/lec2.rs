@@ -22,24 +22,22 @@ pub fn trapping_rain_water(height: Vec<i32>) -> i32 {
             // the current index
             if height[left] < max_left {
                 res += max_left - height[left];
-            } else {    
+            } else {
                 // otherwise update left bound
                 max_left = height[left];
             }
         }
-
     }
 
     res
 }
 
 pub fn max_sliding_window(nums: Vec<i32>, k: i32) -> Vec<i32> {
-    let mut res =  Vec::new(); // vec![0; nums.len() - k + 1]
+    let mut res = Vec::new(); // vec![0; nums.len() - k + 1]
     let mut deque: VecDeque<(i32, usize)> = VecDeque::new();
     let mut start_window_index = 0;
 
     for (i, num) in nums.iter().enumerate() {
-
         // remove element not in window
         while let Some(&(_element, position)) = deque.front() {
             if position >= start_window_index {
@@ -49,7 +47,7 @@ pub fn max_sliding_window(nums: Vec<i32>, k: i32) -> Vec<i32> {
         }
 
         // insert the new element in the window, bubbling it up from the tail
-        // and removing all the ones that has value smaller than the element we are 
+        // and removing all the ones that has value smaller than the element we are
         // inserting
         while let Some(&(last_element, _)) = deque.back() {
             if last_element >= *num {
@@ -84,7 +82,8 @@ pub fn next_greater_element(nums1: Vec<i32>, nums2: Vec<i32>) -> Vec<i32> {
 
     nums2.into_iter().for_each(|num| {
         while let Some(&last) = stack.last() {
-            if num > last { // num is the next greater element of the last
+            if num > last {
+                // num is the next greater element of the last
                 let popped_last = stack.pop().unwrap();
                 if let Some(last_idx) = num_map.get(&popped_last) {
                     res[*last_idx] = num;
@@ -96,7 +95,7 @@ pub fn next_greater_element(nums1: Vec<i32>, nums2: Vec<i32>) -> Vec<i32> {
         stack.push(num);
     });
 
-    res 
+    res
 }
 
 // https://leetcode.com/problems/next-greater-element-ii/description/
@@ -113,7 +112,7 @@ pub fn next_greater_elements(nums: Vec<i32>) -> Vec<i32> {
         // is greater than everyone
         while let Some(&last) = stack.last() {
             // case num is bigger than last.value
-            if *num > last.0  {
+            if *num > last.0 {
                 // in last.1 position of res, put num
                 res[last.1] = *num;
                 // pop the element
@@ -123,7 +122,7 @@ pub fn next_greater_elements(nums: Vec<i32>) -> Vec<i32> {
             }
         }
 
-        // insert <num, pos>   
+        // insert <num, pos>
         stack.push((*num, pos));
     }
 
@@ -140,14 +139,13 @@ pub fn next_greater_elements(nums: Vec<i32>) -> Vec<i32> {
                 found = true;
             }
         }
-        
+
         if !found {
             res[current.1] = -1;
         }
-
     }
 
-    res       
+    res
 }
 
 // TESTS
@@ -160,10 +158,8 @@ mod lec2_tests {
         let arr = vec![1, 2, 1];
         assert_eq!(next_greater_elements(arr), vec![2, -1, 2]);
 
-        let arr = vec![1,2,3,2,1];
-        assert_eq!(next_greater_elements(arr), vec![2,3,-1,3,2]);
-
-
+        let arr = vec![1, 2, 3, 2, 1];
+        assert_eq!(next_greater_elements(arr), vec![2, 3, -1, 3, 2]);
     }
 }
 
@@ -230,7 +226,7 @@ cur 1:4
 
 [3:2, 2:3
 
-2:3 vs 2:6 ? is not greater, go 
+2:3 vs 2:6 ? is not greater, go
 2:3 vs 3:7 ? is greater so in position 3 there's gonna be 3
 
 [3:2
@@ -240,4 +236,3 @@ cur 1:4
 3:2 didn't find any entry greater than him, so in position 2 there's gonna be -1
 
 */
-

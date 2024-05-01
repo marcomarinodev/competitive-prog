@@ -2,7 +2,6 @@ use std::cmp;
 
 // https://leetcode.com/problems/replace-elements-with-greatest-element-on-right-side/description/
 pub fn replace_elements(arr: Vec<i32>) -> Vec<i32> {
-
     let mut max = i32::MIN;
     let mut res = vec![0; arr.len()];
 
@@ -20,7 +19,7 @@ pub fn replace_elements(arr: Vec<i32>) -> Vec<i32> {
     res
 }
 
-/* print all leaders in an array: an element in an array is leader 
+/* print all leaders in an array: an element in an array is leader
 only if it is greater than all the elements on its right side
 */
 pub fn get_leaders(arr: Vec<i32>) -> Vec<i32> {
@@ -82,7 +81,7 @@ mod lec1_tests {
     fn get_leaders_test() {
         // Basic test case
         let arr = vec![16, 17, 4, 3, 5, 2];
-        assert_eq!(get_leaders(arr), vec![2,5,17]);
+        assert_eq!(get_leaders(arr), vec![2, 5, 17]);
 
         // Empty array test case
         let arr = vec![];
@@ -102,7 +101,7 @@ mod lec1_tests {
 
         // All decreasing elements test case
         let arr = vec![5, 4, 3, 2, 1];
-        assert_eq!(get_leaders(arr), vec![1,2,3,4,5]);
+        assert_eq!(get_leaders(arr), vec![1, 2, 3, 4, 5]);
 
         // Mixed positive and negative numbers test case
         let arr = vec![10, -4, 5, -6, 3];
@@ -111,7 +110,7 @@ mod lec1_tests {
 
     #[test]
     fn max_sub_array_test() {
-        let arr = vec![-1,5,8,-9,4,1];
+        let arr = vec![-1, 5, 8, -9, 4, 1];
         assert_eq!(max_sub_array(arr), 13);
     }
 }

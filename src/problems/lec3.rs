@@ -1,13 +1,12 @@
 use num::{FromPrimitive, Num};
 
-
 // simple O(log n) binary search
 pub fn binary_search<T: Ord>(arr: &[T], key: T) -> Option<usize> {
     let mut low = 0;
     let mut high = arr.len();
 
     while low < high {
-        // ! in some implementations you find high + low / 2, but this is dangerous 
+        // ! in some implementations you find high + low / 2, but this is dangerous
         // as high + low can be greater than usize::MAX ==> overflow
         let mid = low + (high - low) / 2;
 
@@ -15,7 +14,7 @@ pub fn binary_search<T: Ord>(arr: &[T], key: T) -> Option<usize> {
             std::cmp::Ordering::Equal => return Some(mid),
             // here high = mid instead of mid - 1, because we don't want to have high negative
             // as it is a usize
-            std::cmp::Ordering::Less => high = mid, 
+            std::cmp::Ordering::Less => high = mid,
             std::cmp::Ordering::Greater => low = mid + 1,
         }
     }
@@ -39,7 +38,7 @@ pub fn binary_search_first_occ<T: Ord>(arr: &[T], key: T) -> Option<usize> {
             std::cmp::Ordering::Equal => {
                 ans = Some(mid);
                 high = mid;
-            },
+            }
             std::cmp::Ordering::Less => high = mid,
             std::cmp::Ordering::Greater => low = mid + 1,
         }
@@ -75,7 +74,7 @@ pub fn binary_search_successor<T: Ord>(arr: &[T], key: T) -> usize {
             std::cmp::Ordering::Equal => {
                 ans = Some(mid);
                 high = mid;
-            },
+            }
             std::cmp::Ordering::Less => high = mid,
             std::cmp::Ordering::Greater => low = mid + 1,
         }
@@ -91,7 +90,7 @@ pub fn binary_search_successor<T: Ord>(arr: &[T], key: T) -> usize {
 // general pattern for problems based on binary search
 // the function returns the largest element of the range satisfying the predicate,
 // or None if there is no such element.
-fn binary_search_range<T, F>(low: T, high: T, pred: F) -> Option<T> 
+fn binary_search_range<T, F>(low: T, high: T, pred: F) -> Option<T>
 where
     T: Num + PartialOrd + FromPrimitive + Copy,
     F: Fn(T) -> bool,
@@ -118,7 +117,6 @@ where
 // social distancing USACO problem
 // https://usaco.org/current/index.php?page=viewproblem2&cpid=1038
 pub fn find_largest_dist(intervals: &mut Vec<(usize, usize)>, c: usize) -> Option<usize> {
-    
     // intervals combined length
     let l = intervals
         .iter()
@@ -132,7 +130,7 @@ pub fn find_largest_dist(intervals: &mut Vec<(usize, usize)>, c: usize) -> Optio
     intervals.sort_unstable();
 
     // predicate
-    let pred = |d : usize | -> bool {
+    let pred = |d: usize| -> bool {
         let mut last_selected = intervals[0].0;
         let mut counter = 1;
 
@@ -148,7 +146,6 @@ pub fn find_largest_dist(intervals: &mut Vec<(usize, usize)>, c: usize) -> Optio
 
     // now we use binary search over d to find the largest d
     binary_search_range(1, l + 1, pred)
-
 }
 
 // https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/
@@ -229,7 +226,7 @@ pub fn find_min(nums: Vec<i32>) -> i32 {
             return nums[low].min(nums[high]);
         }
 
-        if (nums[low] < nums[mid] && nums[mid] < nums[high]) || nums[low] > nums[mid]  {
+        if (nums[low] < nums[mid] && nums[mid] < nums[high]) || nums[low] > nums[mid] {
             high = mid;
         } else {
             low = mid + 1;
@@ -246,7 +243,7 @@ pub fn find_peak_element(nums: Vec<i32>) -> i32 {
         return 0;
     } else if nums[0] > nums[1] {
         return 0;
-    } else if nums[n-1] > nums[n - 2] {
+    } else if nums[n - 1] > nums[n - 2] {
         return (n - 1) as i32;
     }
 
@@ -279,15 +276,15 @@ mod lec3_tests {
 
     #[test]
     fn search_range_test() {
-        let vec1 = vec![5,7,7,8,8,10];
+        let vec1 = vec![5, 7, 7, 8, 8, 10];
 
-        assert_eq!(search_range(&vec1, 8), vec![3,4]);
+        assert_eq!(search_range(&vec1, 8), vec![3, 4]);
         assert_eq!(search_range(&vec1, 6), vec![-1, -1]);
     }
 
     #[test]
     fn binary_search_test() {
-        let vec1 = vec![1,3,3,4,5,6,6,6,6,7,8];
+        let vec1 = vec![1, 3, 3, 4, 5, 6, 6, 6, 6, 7, 8];
 
         assert_eq!(binary_search(&vec1, 3), Some(2));
         assert_eq!(binary_search(&vec1, -1), None);
@@ -296,7 +293,7 @@ mod lec3_tests {
 
     #[test]
     fn binary_search_first_occ_test() {
-        let vec1 = vec![1,3,3,4,5,6,6,6,6,7,8];
+        let vec1 = vec![1, 3, 3, 4, 5, 6, 6, 6, 6, 7, 8];
 
         assert_eq!(binary_search_first_occ(&vec1, 3), Some(1));
         assert_eq!(binary_search_first_occ(&vec1, 5), Some(4));
@@ -306,13 +303,22 @@ mod lec3_tests {
 
     #[test]
     fn binary_search_successor_test() {
-        let vec1 = vec![1,3,3,4,4,6,6,6,6,7,8];
+        let vec1 = vec![1, 3, 3, 4, 4, 6, 6, 6, 6, 7, 8];
 
         assert_eq!(binary_search_successor(&vec1, 2), 1);
         assert_eq!(binary_search_successor(&vec1, 9), 11);
 
-        assert_eq!(binary_search_successor(&vec1, 2), vec1.partition_point(|&x| x < 2) );
-        assert_eq!(binary_search_successor(&vec1, 5), vec1.partition_point(|&x| x < 5) );
-        assert_eq!(binary_search_successor(&vec1, 9), vec1.partition_point(|&x| x < 9) );
+        assert_eq!(
+            binary_search_successor(&vec1, 2),
+            vec1.partition_point(|&x| x < 2)
+        );
+        assert_eq!(
+            binary_search_successor(&vec1, 5),
+            vec1.partition_point(|&x| x < 5)
+        );
+        assert_eq!(
+            binary_search_successor(&vec1, 9),
+            vec1.partition_point(|&x| x < 9)
+        );
     }
 }

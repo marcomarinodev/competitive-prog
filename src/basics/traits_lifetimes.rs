@@ -12,7 +12,6 @@ pub trait Aggregable<T: Display> {
     fn aggregate(&self) -> T;
 }
 
-
 pub struct AggregatedTransaction {
     pub name: String,
     pub aggregated_value: f32,
@@ -26,14 +25,17 @@ impl Display for AggregatedTransaction {
 
 impl Display for Transaction {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{} : {} : {} : {}", self.id, self.object, self.amount, self.quantity)
+        write!(
+            f,
+            "{} : {} : {} : {}",
+            self.id, self.object, self.amount, self.quantity
+        )
     }
 }
 
 impl Aggregable<AggregatedTransaction> for Transaction {
-    
     fn aggregate(&self) -> AggregatedTransaction {
-        AggregatedTransaction { 
+        AggregatedTransaction {
             name: self.object.clone(),
             aggregated_value: self.amount * self.quantity as f32,
         }

@@ -1,12 +1,10 @@
-
 // https://www.geeksforgeeks.org/problems/maximum-path-sum/1
-use std::rc::Rc;
 use std::cell::{Ref, RefCell};
+use std::rc::Rc;
 
 use super::TreeNode;
 
 pub fn max_path_sum(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
-
     let mut max_sum = i32::MIN;
     max_sum_helper(&root, &mut max_sum);
 
@@ -14,7 +12,6 @@ pub fn max_path_sum(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
 }
 
 pub fn max_sum_helper(root: &Option<Rc<RefCell<TreeNode>>>, acc: &mut i32) -> i32 {
-    
     match root {
         None => 0,
         Some(val) => {
@@ -30,9 +27,9 @@ pub fn max_sum_helper(root: &Option<Rc<RefCell<TreeNode>>>, acc: &mut i32) -> i3
             let mut total_sum = root_val.val + left_sum + right_sum;
 
             // I have to take into account the total sum of root, left child and right child,
-            // as it is possible that this sum is greater than the max path sum of going 
+            // as it is possible that this sum is greater than the max path sum of going
             // deep donw the tree
-            *acc = *acc.max(&mut total_sum); 
+            *acc = *acc.max(&mut total_sum);
 
             // this is the result I want to return from a subtree
             // note that this does not depend on acc
@@ -91,7 +88,9 @@ pub fn is_complete_tree(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
                 }
 
                 to_visit.push(Some(left.clone()));
-            } else { flag = true }
+            } else {
+                flag = true
+            }
 
             if let Some(right) = &node_val.right {
                 if flag {
@@ -99,7 +98,9 @@ pub fn is_complete_tree(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
                 }
 
                 to_visit.push(Some(right.clone()));
-            } else { flag = true }
+            } else {
+                flag = true
+            }
         }
     }
 
