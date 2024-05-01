@@ -41,3 +41,36 @@ pub fn max_sum_helper(root: &Option<Rc<RefCell<TreeNode>>>, acc: &mut i32) -> i3
     }
 }
 
+pub fn is_balanced(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
+    let mut height = 0;
+    rec_is_balanced(&root, &mut height)
+}
+
+fn rec_is_balanced(root: &Option<Rc<RefCell<TreeNode>>>, height: &mut i32) -> bool {
+    match root {
+        None => true,
+        Some(tree_node) => {
+            let root_val = tree_node.as_ref().borrow();
+            let mut left_height = 0;
+            let mut right_height = 0;
+            let mut left_ok = true;
+            let mut right_ok = true;
+
+            if let Some(_) = root_val.left {
+                left_ok = rec_is_balanced(&root_val.left, &mut left_height);
+            }
+
+            if let Some(_) = root_val.right {
+                right_ok = rec_is_balanced(&root_val.right, &mut right_height);
+            }
+
+            *height = left_height.max(right_height) + 1;
+
+            if (left_height - right_height).abs() > 1 {
+                return false;
+            }
+
+            left_ok && right_ok
+        }
+    }
+}
