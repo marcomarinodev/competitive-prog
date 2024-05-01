@@ -154,6 +154,64 @@ impl Tree {
         true
     }
 
+    pub fn is_max_heap(&self) -> bool {
+        self.verify_max_heap_property(Some(0)) && self.verify_completeness_property()
+    }
+
+    fn verify_max_heap_property(&self, node_id: Option<usize>) -> bool {
+        if let Some(id) = node_id {
+            let node = &self.nodes[id];
+
+            if let Some(left_id) = node.id_left {
+                if node.key < *&self.nodes[left_id].key {
+                    return false;
+                }
+            }
+
+            if let Some(right_id) = node.id_right {
+                if node.key < *&self.nodes[right_id].key {
+                    return false;
+                }
+            }
+
+            let left_ok = self.verify_max_heap_property(node.id_left);
+            let right_ok = self.verify_max_heap_property(node.id_right);
+
+            return left_ok && right_ok;
+        }
+
+        true
+    }
+
+    /// if i encounter a non full node, then the next one 
+    /// shouldn't have any child, otherwise is not complete
+    fn verify_completeness_property(&self) -> bool {
+        let mut to_visit: Vec<usize> = Vec::new();
+        let mut flag = false;
+
+        
+        to_visit.push(0);
+
+        while !to_visit.is_empty() {
+            let node = &self.nodes[to_visit.remove(0)];
+
+            if let Some(id_left) = node.id_left {
+                if flag { return false }
+
+                to_visit.push(id_left);
+            } else { flag = true }
+
+            if let Some(id_right) = node.id_right {
+                if flag { return false }
+
+                to_visit.push(id_right);
+            } else { flag = true }
+        }
+        
+
+        true
+    }
+
 }
 
 #[cfg(test)]
@@ -163,17 +221,14 @@ mod tests {
     #[test]
     fn test_sum() {
         let mut tree = Tree::with_root(10);
-
         assert_eq!(tree.sum(), 10);
 
         tree.add_node(0, 5, true); // id 1
         tree.add_node(0, 22, false); // id 2
-
         assert_eq!(tree.sum(), 37);
 
         tree.add_node(1, 7, false); // id 3
         tree.add_node(2, 20, true); // id 4
-
         assert_eq!(tree.sum(), 64);
     }
 
@@ -183,61 +238,76 @@ mod tests {
 
         tree.add_node(0, 3, true);
         tree.add_node(0, 7, false);
-
         assert_eq!(tree.is_bst(), true);
 
         tree.add_node(1, 1, true);
         tree.add_node(1, 4, false);
-
         assert_eq!(tree.is_bst(), true);
 
         tree.add_node(2, 6, true);
         tree.add_node(2, 8, false);
-
         assert_eq!(tree.is_bst(), true);
 
         tree.add_node(6, 6, false);
-
         assert_eq!(tree.is_bst(), false);
     }
 
     #[test]
     fn test_is_balanced() {
         let mut tree = Tree::with_root(1);
-
         assert_eq!(tree.is_balanced(), true);
 
         tree.add_node(0, 2, true); // id 1
-
         assert_eq!(tree.is_balanced(), true);
 
         tree.add_node(1, 3, true); // id 2
-
         assert_eq!(tree.is_balanced(), false);
 
         tree.add_node(2, 6, true); // id 3
-
         assert_eq!(tree.is_balanced(), false);
 
         tree.add_node(0, 4, false); // id 4
-
         assert_eq!(tree.is_balanced(), false);
 
         tree.add_node(4, 5, false); // id 5
-
         assert_eq!(tree.is_balanced(), false);
 
         tree.add_node(5, 7, false); // id 6
-
         assert_eq!(tree.is_balanced(), false);
 
         tree.add_node(1, 8, false); // id 7 
-
         assert_eq!(tree.is_balanced(), false);
 
         tree.add_node(4, 9, true); // id 8
-
         assert_eq!(tree.is_balanced(), true);
 
+    }
+
+    #[test]
+    fn test_is_complete() {
+        let mut tree = Tree::with_root(1);
+        assert_eq!(tree.verify_completeness_property(), true);
+
+        tree.add_node(0, 3, false); // id 1
+        assert_eq!(tree.verify_completeness_property(), false);
+
+        tree.add_node(0, 2, true); // id 2
+        assert_eq!(tree.verify_completeness_property(), true);
+
+        tree.add_node(2, 4, true); // id 3
+        tree.add_node(2, 5, false); // id 4
+        assert_eq!(tree.verify_completeness_property(), true);
+
+        tree.add_node(1, 7, false); // id 5
+        assert_eq!(tree.verify_completeness_property(), false);
+
+        tree.add_node(1, 6, true); // id 6
+        assert_eq!(tree.verify_completeness_property(), true);
+
+        tree.add_node(3, 8, true); // id 7
+        assert_eq!(tree.verify_completeness_property(), true);
+
+        tree.add_node(7, 10, false); // id 8
+        assert_eq!(tree.verify_completeness_property(), false);
     }
 }

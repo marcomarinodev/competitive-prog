@@ -1,7 +1,7 @@
 
 // https://www.geeksforgeeks.org/problems/maximum-path-sum/1
 use std::rc::Rc;
-use std::cell::RefCell;
+use std::cell::{Ref, RefCell};
 
 use super::TreeNode;
 
@@ -73,4 +73,35 @@ fn rec_is_balanced(root: &Option<Rc<RefCell<TreeNode>>>, height: &mut i32) -> bo
             left_ok && right_ok
         }
     }
+}
+
+pub fn is_complete_tree(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
+    let mut to_visit = Vec::from([root]);
+    let mut flag = false;
+
+    while !to_visit.is_empty() {
+        let node_opt = to_visit.remove(0);
+
+        if let Some(node) = node_opt {
+            let node_val = node.as_ref().borrow();
+
+            if let Some(left) = &node_val.left {
+                if flag {
+                    return false;
+                }
+
+                to_visit.push(Some(left.clone()));
+            } else { flag = true }
+
+            if let Some(right) = &node_val.right {
+                if flag {
+                    return false;
+                }
+
+                to_visit.push(Some(right.clone()));
+            } else { flag = true }
+        }
+    }
+
+    true
 }
